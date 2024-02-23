@@ -1,10 +1,10 @@
 'use client'
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-export default function AvatarComponent() {
+export default function AvatarComponent(user: any) {
   return (
     <Avatar>
-      <AvatarImage src="https://github.com/shadcn.png" />
+      <AvatarImage src={user.image} />
       <AvatarFallback>CN</AvatarFallback>
     </Avatar>
   );

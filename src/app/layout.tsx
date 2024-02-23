@@ -35,7 +35,7 @@ export default function RootLayout({
             <NavBar />
             </div>
           </div>
-          <div className="relative mt-10">
+          <div className="relative ">
           {children}
           </div>
         

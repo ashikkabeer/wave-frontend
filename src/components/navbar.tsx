@@ -33,7 +33,7 @@ const MagneticTab = ({ item }: { item: { id: number; text: string } }) => {
         // onMouseMove={handleMouseMove}
         onMouseLeave={onMouseOut}
       >
-        <span className="relative px-4 py-2 text-sm text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100">
+        <span className="relative px-4 py-2 text-sm text-zinc-600 transition-colors hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 -- after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-full after:origin-bottom-right after:scale-x-0 after:bg-neutral-800 after:transition-transform after:duration-300 after:ease-[cubic-bezier(0.65_0.05_0.36_1)] hover:after:origin-bottom-left hover:after:scale-x-100">
           {item.text}
         </span>{" "}
         <div
