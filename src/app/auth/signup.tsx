@@ -1,9 +1,9 @@
-'use client';
-import formSchema from './schema/signup.schema';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { Button } from '@/components/ui/button';
+"use client";
+import formSchema from "./schema/signup.schema";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -12,7 +12,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
+} from "@/components/ui/form";
 
 import {
   Select,
@@ -20,44 +20,43 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from "@/components/ui/select";
 
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export function ProfileForm() {
-  // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
+      username: "",
     },
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
   }
-
+  const { handleSubmit } = useForm({
+    resolver: zodResolver(formSchema),
+  });
   return (
-    <div className='flex justify-center'>
+    <div className="flex justify-center">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-        <FormField
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
             control={form.control}
-            name='username'
+            name="name"
             render={({ field }) => (
               <div>
-                <FormItem className='mt-5'>
+                <FormItem className="mt-5">
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder='Name' {...field} />
+                    <Input placeholder="Name" {...field} />
                   </FormControl>
-                  <FormDescription>
-                  </FormDescription>
+                  <FormDescription></FormDescription>
                   <FormMessage />
                 </FormItem>
               </div>
@@ -65,17 +64,15 @@ export function ProfileForm() {
           />
           <FormField
             control={form.control}
-            name='username'
+            name="username"
             render={({ field }) => (
               <div>
-                <FormItem className='mt-5'>
+                <FormItem className="mt-5">
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder='password' {...field} />
+                    <Input placeholder="username" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    This be displayed to public
-                  </FormDescription>
+                  <FormDescription>This be displayed to public</FormDescription>
                   <FormMessage />
                 </FormItem>
               </div>
@@ -83,13 +80,13 @@ export function ProfileForm() {
           />
           <FormField
             control={form.control}
-            name='username'
+            name="email"
             render={({ field }) => (
               <div>
-                <FormItem className='mt-5'>
-                  <FormLabel>Email</FormLabel>
+                <FormItem className="mt-5">
+                  <FormLabel>Student Email id</FormLabel>
                   <FormControl>
-                    <Input placeholder='ashikkabeer03@gmail.com' {...field} />
+                    <Input placeholder="example@musaliar.edu" {...field} />
                   </FormControl>
                   <FormDescription>
                     This wont be displayed to anyone
@@ -103,16 +100,15 @@ export function ProfileForm() {
           {/* ---------------------- */}
           <FormField
             control={form.control}
-            name='username'
+            name="password"
             render={({ field }) => (
               <div>
-                <FormItem className='mt-5'>
+                <FormItem className="mt-5">
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder='password' {...field} />
+                    <Input placeholder="password" {...field} />
                   </FormControl>
-                  <FormDescription>
-                  </FormDescription>
+                  <FormDescription></FormDescription>
                   <FormMessage />
                 </FormItem>
               </div>
@@ -121,20 +117,24 @@ export function ProfileForm() {
           {/* --------------------- */}
           <FormField
             control={form.control}
-            name='username'
+            name="gender"
             render={({ field }) => (
               <div>
-                <FormItem className='mt-5'>
+                <FormItem className="mt-5">
                   <FormLabel>Gender</FormLabel>
                   <FormControl>
-                    <RadioGroup defaultValue='option-one'>
-                      <div className='flex items-center space-x-2'>
-                        <RadioGroupItem value='option-one' id='option-one' />
-                        <Label htmlFor='option-one'>Male</Label>
+                    <RadioGroup {...field} defaultValue="male">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="male" id="male" />
+                        <Label htmlFor="male">Male</Label>
                       </div>
-                      <div className='flex items-center space-x-2'>
-                        <RadioGroupItem value='option-two' id='option-two' />
-                        <Label htmlFor='option-two'>Female</Label>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="female" id="female" />
+                        <Label htmlFor="female">Female</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="other" id="other" />
+                        <Label htmlFor="other">other</Label>
                       </div>
                     </RadioGroup>
                   </FormControl>
@@ -145,40 +145,7 @@ export function ProfileForm() {
             )}
           />
 
-          {/* --------------- */}
-
-          <FormField
-            control={form.control}
-            name='username'
-            render={({ field }) => (
-              <div>
-                <FormItem className='mt-5'>
-                  {/* <FormLabel>Gender</FormLabel> */}
-                  <FormControl>
-                    <Select>
-                      <SelectTrigger className='w-[180px]'>
-                        <SelectValue placeholder='College' />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value='light'>
-                          Musaliar College of Engineering and Technology
-                        </SelectItem>
-                        <SelectItem value='dark'>TKM</SelectItem>
-                        <SelectItem value='system'>CET</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                  <FormDescription>
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              </div>
-            )}
-          />
-
-          {/* ----------- */}
-
-          <Button type='submit'>Submit</Button>
+          <Button type="submit">Submit</Button>
         </form>
       </Form>
     </div>
