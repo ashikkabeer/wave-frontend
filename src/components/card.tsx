@@ -44,13 +44,12 @@ export default function Cards() {
           <CardContent>
             <div className="border-2 border-x-0 border-t-0">
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Molestias doloribus, labore aspernatur ratione qui eaque
-                officia, aliquid ipsa fugit pariatur tempore architecto iusto
-                nobis optio repellat debitis nam tenetur ad officiis. Voluptatem
-                placeat libero sed non quasi, asperiores laboriosam. Incidunt,
-                ipsum iste. Molestiae incidunt sunt cupiditate vel dolorum fugit
-                sit?
+                Lost in the enchanting charm of Mountains! 🏞️ From the
+                mesmerizing landscapes to the rich tapestry of local cultures,
+                every moment felt like a dream. Each corner unveiled a new
+                story, a new adventure. Gratitude fills my heart for this
+                unforgettable experience. Highly recommend adding this gem to
+                your travel bucket list! #TravelAdventures #DiscoverTheWorld
               </p>
               <div className="pic w-full h-full object-contain  animate-pop my-4">
                 <Image
