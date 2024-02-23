@@ -6,6 +6,7 @@ import ThemeProvider from "@/components/theme-provider";
 const inter = Inter({ subsets: ["latin"] });
 import Image from "next/image";
 export const metadata: Metadata = {
+  
   title: "Wave",
   description: "eveything but facebook",
 };
@@ -34,7 +35,7 @@ export default function RootLayout({
             <NavBar />
             </div>
           </div>
-          <div className="relative">
+          <div className="relative mt-10">
           {children}
           </div>
         
