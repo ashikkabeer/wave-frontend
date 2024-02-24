@@ -59,10 +59,12 @@ export default function Cards({ data }: { data: any }) {
             <div className="mx-5 w-full flex justify-between">
               <button
                 onClick={handleLike}
-                className="relative overflow-hidden px-5 text-white duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:translate-y-1 active:scale-x-110 active:scale-y-90"
+                className="relative overflow-hidden px-5 text-black dark:text-white duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:translate-y-1 active:scale-x-110 active:scale-y-90"
               >
-                <Heart color={`${liked ? "#ff0000" : "#000000"}`} />{" "}
-                <p>{data.like}</p>
+                <div className="flex gap-2">
+                  <Heart color={`${liked ? "#ff0000" : "#000000"}`} />{" "}
+                  <p className="">{data.like}</p>
+                </div>
               </button>
               <button className="relative overflow-hidden px-5 text-white duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:translate-y-1 active:scale-x-110 active:scale-y-90">
                 <MessageCircle color="#000000" />

@@ -1,5 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
+import { usePathname } from "next/navigation";
+
 import Link from "next/link";
 const MagneticTab = ({ item }: { item: { id: number; text: string } }) => {
   const ref = useRef<HTMLButtonElement>(null);
@@ -28,7 +30,6 @@ const MagneticTab = ({ item }: { item: { id: number; text: string } }) => {
       <Link
         // href="/home"
         href={item.text.toLowerCase()}
-
         className="relative h-9"
         // onMouseMove={handleMouseMove}
         onMouseLeave={onMouseOut}
@@ -56,13 +57,17 @@ const tabs = [
 ];
 
 export default function NavBar() {
-  return (
-    <div>
-      <div className="flex flex-row ">
-        {tabs.map((item) => (
-          <MagneticTab key={item.id} item={item} />
-        ))}
+  const pathname = usePathname();
+  if (pathname != "/") {
+    return (
+      <div>
+        <div className="flex flex-row ">
+          {tabs.map((item) => (
+            <MagneticTab key={item.id} item={item} />
+          ))}
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+  return null
 }
