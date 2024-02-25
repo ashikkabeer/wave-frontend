@@ -38,9 +38,9 @@ const MagneticTab = ({ item }: { item: { id: number; text: string } }) => {
           {item.text}
         </span>{" "}
         <div
-          className="absolute h-full w-full rounded-[4px]transition-opacity bg-transparent"
+          className="absolute h-full w-full rounded-[4px] transition-opacity"
           aria-hidden="true"
-          style={{
+          style={{backgroundColor: 'transparent',
             transform: `translate(${hoverPosition.x}px, ${hoverPosition.y}px)`,
             opacity: hoverPosition.opacity,
           }}
@@ -58,7 +58,7 @@ const tabs = [
 
 export default function NavBar() {
   const pathname = usePathname();
-  if (pathname != "/") {
+  if (pathname!='/auth' && pathname != "/" ) {
     return (
       <div>
         <div className="flex flex-row ">
