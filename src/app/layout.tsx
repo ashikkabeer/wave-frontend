@@ -29,13 +29,13 @@ export default function RootLayout({
         >
           <div className="nav pt-5 flex w-screen justify-center">
             <div className="w-full">
-                  <Image
-                    src="/base-logo.png"
-                    width={500}
-                    height={500}
-                    className="ml-5  object-contain size-9 my-0 flex justify-start"
-                    alt="Picture of the author"
-                  />
+              <Image
+                src="/base-logo.png"
+                width={500}
+                height={500}
+                className="ml-5  object-contain size-9 my-0 flex justify-start"
+                alt="Picture of the author"
+              />
             </div>
             <div className="absolute">
               <NavBar />
