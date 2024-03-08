@@ -9,6 +9,6 @@ const formSchema = z.object({
   password: z.string().min(2).max(50),
   email: z.string().min(2).max(50),
   collegeName: z.string().min(2).max(50),
-  gender: z.string().min(2).max(50),
+  gender: z.any()
 });
 export default formSchema

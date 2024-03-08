@@ -1,153 +1,59 @@
-"use client";
-import formSchema from "./schema/signup.schema";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+'use client'
+import { FormEvent } from 'react'
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Button } from "@/components/ui/button"
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {z} from "zod";
+export function SignUp() {
+    async function onSubmit(event: FormEvent<HTMLFormElement>) {
+        // event.preventDefault()
+        console.log('on submit triggered')
 
-export function ProfileForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-    },
-  });
+        const formData = new FormData(event.currentTarget)
+        console.log(formData)
+        const response = await fetch('http://localhost:7000/', {
+            method: 'POST',
+            body: formData,
+        })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
-  const { handleSubmit } = useForm({
-    resolver: zodResolver(formSchema),
-  });
-  return (
-    <div className="flex justify-center">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <div>
-                <FormItem className="mt-5">
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Name" {...field} />
-                  </FormControl>
-                  <FormDescription></FormDescription>
-                  <FormMessage />
-                </FormItem>
-              </div>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <div>
-                <FormItem className="mt-5">
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input placeholder="username" {...field} />
-                  </FormControl>
-                  <FormDescription>This be displayed to public</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              </div>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <div>
-                <FormItem className="mt-5">
-                  <FormLabel>Student Email id</FormLabel>
-                  <FormControl>
-                    <Input placeholder="example@musaliar.edu" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    This wont be displayed to anyone
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              </div>
-            )}
-          />
+        // Handle response if necessary
+        const data = await response.json()
+        console.log(data)
+    }
+    // username: z.string().min(2).max(50),
+    //     name: z.string().min(2).max(50),
+    //     password: z.string().min(2).max(50),
+    //     email: z.string().min(2).max(50),
+    //     gender: z.any()
+    return (
+        <div className={'w-screen mx-5'}>
+            <div className={"w-full flex justify-center items-center"}>
+                <form className="w-auto flex flex-col space-y-8" onSubmit={onSubmit}>
+                    <label className="flex flex-col" htmlFor="username">
+                        Username: <input className="input" type="text" name="username" placeholder="username"/>
+                    </label>
+                    <label className="flex flex-col" htmlFor="name">
+                        Name: <input className="input" type="text" name="name" placeholder="name"/>
+                    </label>
+                    <label className="flex flex-col" htmlFor="email">
+                        Email: <input className="input" type="email" name="email" placeholder="email"/>
+                    </label>
+                    <label className="flex flex-col" htmlFor="password">
+                        Password: <input className="input" type="password" name="password" placeholder="password"/>
+                    </label>
+                    <label className="flex flex-col" htmlFor="gender">
+                        Gender
+                        <select className="input" name="gender">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </label>
+                    <button className="py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90" type="submit">
+                        Submit
+                    </button>
+                </form>
 
-          {/* ---------------------- */}
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <div>
-                <FormItem className="mt-5">
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input placeholder="password" {...field} />
-                  </FormControl>
-                  <FormDescription></FormDescription>
-                  <FormMessage />
-                </FormItem>
-              </div>
-            )}
-          />
-          {/* --------------------- */}
-          <FormField
-            control={form.control}
-            name="gender"
-            render={({ field }) => (
-              <div>
-                <FormItem className="mt-5">
-                  <FormLabel>Gender</FormLabel>
-                  <FormControl>
-                    <RadioGroup {...field} defaultValue="male">
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="male" id="male" />
-                        <Label htmlFor="male">Male</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="female" id="female" />
-                        <Label htmlFor="female">Female</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="other" id="other" />
-                        <Label htmlFor="other">other</Label>
-                      </div>
-                    </RadioGroup>
-                  </FormControl>
-
-                  <FormMessage />
-                </FormItem>
-              </div>
-            )}
-          />
-
-          <Button type="submit">Submit</Button>
-        </form>
-      </Form>
-    </div>
-  );
+            </div>
+        </div>
+    )
 }
