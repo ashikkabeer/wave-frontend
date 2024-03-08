@@ -4,6 +4,7 @@ import { FormEvent } from 'react'
 import { Button } from "@/components/ui/button"
 
 import {z} from "zod";
+import {redirect} from "next/navigation";
 export default function SignIn() {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     try {
@@ -27,13 +28,15 @@ export default function SignIn() {
 
       // Handle response if necessary
       const data = await response.json()
+      if(data) {
+        window.location.replace('/home')
+      }
       console.log(data)
     } catch (error) {
       console.log(error)
     }
   }
-  // username: z.string().min(2).max(50),
-  // password: z.string().min(2).max(50),
+
   return (
       <div className={''}>
         <div className={""}>

@@ -1,6 +1,6 @@
 'use client'
 import { FormEvent } from 'react'
-
+import { redirect } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 
 import {z} from "zod";
@@ -27,6 +27,9 @@ export function SignUp() {
 
             // Handle response if necessary
             const data = await response.json()
+            if(data) {
+                window.location.replace('/home')
+            }
             console.log(data)
         } catch (error) {
             console.log(error)
