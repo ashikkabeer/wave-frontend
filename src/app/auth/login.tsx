@@ -1,104 +1,58 @@
-"use client";
-import formSchema from "./schema/signup.schema";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+'use client'
+import { FormEvent } from 'react'
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Button } from "@/components/ui/button"
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import {z} from "zod";
+export default function SignIn() {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    try {
+      event.preventDefault()
+      console.log(event.defaultPrevented)
 
-export function LoginForm() {
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      username: "",
-    },
-  });
+      const formData = new FormData(event.currentTarget)
+      console.log("formData", formData)
 
-  // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+      const values = Object.fromEntries(formData.entries());
+
+      console.log("values", JSON.stringify(values))
+      const response = await fetch('http://localhost:3000/auth/signin', {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: 'POST',
+        mode:"cors",
+        body:JSON.stringify(values),
+      })
+
+      // Handle response if necessary
+      const data = await response.json()
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
   }
-
+  // username: z.string().min(2).max(50),
+  // password: z.string().min(2).max(50),
   return (
-    <div className="flex justify-center">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => <div></div>}
-          />
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <div>
-                <FormItem className="mt-5">
-                  <FormLabel>Username or Email</FormLabel>
-                  <FormControl>
-                    <Input placeholder="username or email" {...field} />
-                  </FormControl>
-                  <FormDescription></FormDescription>
-                  <FormMessage />
-                </FormItem>
-              </div>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => <div></div>}
-          />
+      <div className={''}>
+        <div className={""}>
+          <form className=" flex flex-col space-y-1" onSubmit={onSubmit}>
+            <label htmlFor='username' className="flex flex-col">
+              Username: <input className="input" type="text" name="username" placeholder="username"/>
+            </label>
 
-          {/* ---------------------- */}
-          <FormField
-            control={form.control}
-            name="username"
-            render={({ field }) => (
-              <div>
-                <FormItem className="mt-5">
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input placeholder="password" {...field} />
-                  </FormControl>
-                  <FormDescription></FormDescription>
-                  <FormMessage />
-                </FormItem>
-              </div>
-            )}
-          />
-          {/* --------------------- */}
 
-          {/* --------------- */}
+            <label htmlFor='password' className="flex flex-col">
+              Password: <input className="input" type="password" name="password" placeholder="password"/>
+            </label>
 
-          {/* ----------- */}
+            <button className="py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90" type="submit">
+              Signin
+            </button>
+          </form>
 
-          <Button type="submit">Submit</Button>
-        </form>
-      </Form>
-    </div>
-  );
+        </div>
+      </div>
+  )
 }

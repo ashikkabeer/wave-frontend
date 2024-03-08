@@ -64,5 +64,5 @@
   @apply w-screen fixed inset-0 -z-10 h-full bg-white [background:radial-gradient(125%_125%_at_50%_10%,#fff_40%,#63e_100%)] dark:absolute dark:inset-0 dark:-z-10 dark:h-full dark:w-full dark:items-center dark:px-5 dark:py-24 dark:[background:radial-gradient(125%_125%_at_50%_10%,#000_40%,#63e_100%)]
 }
 .input {
-  @apply border-2 my-1 rounded p-2 border-black
+  @apply mt-2 w-[340px] rounded-md border my-1  p-2 border-black
 }
