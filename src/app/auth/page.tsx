@@ -24,12 +24,3 @@ export default function AuthPage() {
     )
 }
 
-// export default function AuthPage() {
-//   return (
-//       <main>
-//         <div>
-//         </div>
-//       </main>
-//
-//   );
-// }
