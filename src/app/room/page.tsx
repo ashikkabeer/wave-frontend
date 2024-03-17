@@ -1,15 +1,14 @@
-import Chat from "./components/chat";
-export default function Room() {
-  return (
-    
-    <div className="w-screen flex flex-col justify-center items-center">
-      <div className="md:max-w-2xl max-w-96">
-        <Chat />
-      </div>
-      {/* ------------------------------- */}
-      <div className="my-2 md:max-w-2xl max-w-96">
-        <Chat />
+import Image from "next/image"
+import Chat from "./chat"
+
+export default async function Room() {
+  return(
+    <div className="w-screen flex justify-center">
+      <div className=" w-full px-10 md:w-1/2 h-screen bg-pink-200">
+        <div className="mt-10 ">
+          <Chat/>
+        </div>
       </div>
     </div>
-  );
+  )
 }
