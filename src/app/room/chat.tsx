@@ -7,53 +7,89 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useRef, useState } from "react";
+import { useRef, useState,useEffect } from "react";
+import {io} from "socket.io-client"
 
-export default function Chat() {
+const SystemMessage = {
+  id:1,
+  body:"Welcome to wave",
+  author:"Bot",
+  createdAt: new Date().setFullYear(2021, 10, 10)
+}
+const socket = io('http://localhost:3000');
+// const socket = io('http://localhost:3000', { autoConnect: false });
+interface ChatProps {
+  currentUser: string; // Adjust the type according to your needs
+}
+export default function Chat({ currentUser }: ChatProps) {
   const dummy = useRef();
-  // const messagesRef = firestore.collection('messages'); // replace it with api calls
-  // const query = messagesRef.orderBy('createdAt').limit(25); // replace
+  const [inputValue, setinputValue] = useState("");
+  const [messages, setMessages] = useState([SystemMessage]);
 
-  // const [messages] = useCollectionData(query, { idField: 'id' }); //firebase
+  useEffect(()=> {
+    socket.connect();
 
-  const [formValue, setFormValue] = useState("");
+    socket.on("connect",() => {
+      console.log("Socket connected");
+    })
+    socket.on("disconnect",() => {
+      console.log("Socket disconnected");
+    })
 
-  const sendMessage = async (e: any) => {
-    e.preventDefault();
+    socket.on("createMessage",(newMessage) => {
+      setMessages((previousMessages) => [...previousMessages,newMessage])
+    })
+    return () => {
+      socket.off("connect");
+      socket.off("disconnect");
+      socket.off("createMessage");
+    }
+  },[]);
 
-    // const { uid, photoURL } = auth.currentUser; //get the users info
-
-    // await messagesRef.add({
-    //   text: formValue,
-    //   createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    //   uid,
-    //   photoURL
-    // })
-
-    setFormValue("");
-    // dummy.current.scrollIntoView({ behavior: 'smooth' });
+  const handleSendMessage = (e) => {
+    if(e.key != "Enter" || inputValue.trim().length ===0 )return;
+console.log(e.target.value)
+    socket.emit("createMessage", {author:"ashik",body:inputValue.trim()});
+    setinputValue("");
   };
+  const handleLogout = () => {
+    socket.disconnect();
+  }
+
+  // const sendMessage = async (e: any) => {
+  //   e.preventDefault();
+
+  //   setinputValue("");
+  //   // dummy.current.scrollIntoView({ behavior: 'smooth' });
+  // };
   return (
     <div>
-      <Card>
-        <CardHeader className="m-0 py-1 underline text-sm ">
-          <p>@ashikkabeer</p>
-        </CardHeader>
-        <CardContent className="py-0">
-          <p className="text-md">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Fuga
-            dignissimos aliquid est. Similique aspernatur quasi ullam vel, hic
-            minima est veniam ea porro fugiat quisquam accusamus voluptatibus
-            asperiores voluptate adipisci, ducimus eius maxime unde aperiam
-            blanditiis consectetur ipsum aliquid eos? Velit, incidunt excepturi?
-            Voluptatum, delectus adipisci magnam dignissimos, quia culpa quo
-            fugit ipsam, illum autem ea.
-          </p>
-        </CardContent>
-        <CardFooter className="flex justify-end py-1">
-          <p className="text-sm">16:05</p>
-        </CardFooter>
-      </Card>
+      <div className="chat">
+      {messages.map((message, idx) => (
+        <div
+        key={idx}
+        className={`char-message ${
+          currentUser === message.author ? "outgoing" : ""
+        }`}
+        >
+        <div className="chat-message-wrapper">
+          <span className="chat-message-author">{message.author}</span>
+          <div className="chat-message-bubble">
+            <span className="chat-message-body">{message.body}</span>
+          </div>
+        </div>
+        </div>
+      ))}
+    </div>
+    <div className="chat-composer">
+      <input
+      type="text"
+      placeholder="enter to send a message"
+      value={inputValue}
+      onChange={(e) => setinputValue(e.target.value)}
+      onKeyDown={handleSendMessage}
+      />
+    </div>
     </div>
   );
 }
