@@ -1,59 +1,20 @@
-import { type Metadata } from 'next'
-import { notFound, redirect } from 'next/navigation'
+import Image from "next/image";
+import Chat from "./chat";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button"
 
-import { auth } from '@/auth'
-import { getChat, getMissingKeys } from '@/app/actions'
-import { Chat } from '@/components/chat'
-import { AI } from '@/lib/chat/actions'
-import { Session } from '@/lib/types'
-
-export interface ChatPageProps {
-  params: {
-    id: string
-  }
-}
-export async function generateMetadata({
-  params
-}: ChatPageProps): Promise<Metadata> {
-  const session = await auth()
-
-  if (!session?.user) {
-    return {}
-  }
-
-  const chat = await getChat(params.id, session.user.id)
-  return {
-    title: chat?.title.toString().slice(0, 50) ?? 'Chat'
-  }
-}
-
-export default async function ChatPage({ params }: ChatPageProps) {
-  const session = (await auth()) as Session
-  const missingKeys = await getMissingKeys()
-
-  if (!session?.user) {
-    redirect(`/login?next=/chat/${params.id}`)
-  }
-
-  const userId = session.user.id as string
-  const chat = await getChat(params.id, userId)
-
-  if (!chat) {
-    redirect('/')
-  }
-
-  if (chat?.userId !== session?.user?.id) {
-    notFound()
-  }
-
+export default async function Room() {
   return (
-    <AI initialAIState={{ chatId: chat.id, messages: chat.messages }}>
-      <Chat
-        id={chat.id}
-        session={session}
-        initialMessages={chat.messages}
-        missingKeys={missingKeys}
-      />
-    </AI>
-  )
+    <div className="w-screen flex justify-center my">
+      <div className=" w-full px-10 md:w-1/2 h-screen bg-blue-500">
+        <div className="h-full gap-2 flex flex-col my-10">
+          <Chat currentUser={"ashikkabeer"} />
+          <div className="fixed flex w-full justify-center gap-2 bottom-0">
+          <Input className=" w-2/4"/>
+          <Button variant="outline">Button</Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

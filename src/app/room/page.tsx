@@ -1,20 +1,12 @@
-import Image from "next/image";
-import Chat from "./chat";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button"
+import Link from "next/link"
+import Chat from "./chat"
+export default function Room () {
 
-export default async function Room() {
-  return (
-    <div className="w-screen flex justify-center my">
-      <div className=" w-full px-10 md:w-1/2 h-screen bg-blue-500">
-        <div className="h-full gap-2 flex flex-col my-10">
-          <Chat currentUser={"ashikkabeer"} />
-          <div className="fixed flex w-full justify-center gap-2 bottom-0">
-          <Input className=" w-2/4"/>
-          <Button variant="outline">Button</Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    return (
+        <main className="w-screen flex justify-center">
+            <div className="w-2/4 h-screen flex-col gap-3">
+               <Link className="" href={"https://www.github.com/ashikkabeer"}> <Chat /></Link>
+            </div>
+        </main>
+    )
 }
