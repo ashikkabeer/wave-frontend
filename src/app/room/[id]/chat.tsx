@@ -17,7 +17,6 @@ const SystemMessage = {
   createdAt: new Date().setFullYear(2021, 10, 10)
 }
 const socket = io('http://localhost:3000');
-// const socket = io('http://localhost:3000', { autoConnect: false });
 interface ChatProps {
   currentUser: string; // Adjust the type according to your needs
 }
