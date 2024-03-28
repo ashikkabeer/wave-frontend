@@ -2,7 +2,7 @@ import Link from "next/link";
 import Hero from "@/components/hero";
 export default function Home() {
   return (
-    <main className=" w-screen flex min-h-screen flex-col items-center justify-between">
+    <main className=" w-screen flex min-h-screen flex-col items-center overflow-hidden justify-between">
 
       <Hero
         data={{
