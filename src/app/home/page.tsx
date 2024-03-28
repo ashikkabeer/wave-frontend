@@ -1,7 +1,7 @@
 'use client'
 import React, { useState, useEffect } from "react";
 import Cards from "@/components/card";
-
+import { CreatePostButton } from "@/components/createPostButton";
 export default function HomePage() {
   // api-> https://65d90abac96fbb24c1bcb008.mockapi.io/api/v1/posts
   const [data, setData] = useState([]);
@@ -27,6 +27,7 @@ export default function HomePage() {
 
   return (
     <main>
+      <div className="flex justify-end"><CreatePostButton/></div>
       {loading ? (
       <div className="flex justify-center items-center h-full">
          <p>Loading...</p>

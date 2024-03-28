@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Chat from "./chat";
 import { CreateRoomButton } from "./createButton";
-export default function Room() {
+export default function Room({params}) {
   return (
     <main className="w-screen flex justify-center items-center">
       <div className="w-full flex flex-col justify-center items-center">
@@ -9,7 +9,8 @@ export default function Room() {
           <div className="w-full flex justify-end">
             <CreateRoomButton />
           </div>
-          <Link className="" href={"https://www.github.com/ashikkabeer"}>
+          {/* <Link className="" href={`room/${params}`}> */}
+          <Link className="" href={`room/10`}>
             <Chat />
           </Link>
         </div>

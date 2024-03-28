@@ -53,7 +53,7 @@ const MagneticTab = ({ item }: { item: { id: number; text: string } }) => {
 const tabs = [
   { id: 1, text: "Home" },
   { id: 2, text: "Room" },
-  { id: 3, text: "Circle" },
+  { id: 3, text: "Event" },
 ];
 
 export default function NavBar() {
