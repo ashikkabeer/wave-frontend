@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useState, useEffect } from "react";
 import Cards from "@/components/card";
 import { CreatePostButton } from "@/components/createPostButton";
@@ -11,8 +11,16 @@ export default function HomePage() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "https://65d90abac96fbb24c1bcb008.mockapi.io/api/v1/posts"
+          "http://localhost:3000/post/", {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer " + localStorage.getItem("access_token"),
+            },
+            method: "GET",
+            mode: "cors",
+          }
         );
+        console.log(response)
         const result = await response.json();
         setData(result);
       } catch (error) {
@@ -27,33 +35,32 @@ export default function HomePage() {
 
   return (
     <main>
-      <div className="flex justify-end"><CreatePostButton/></div>
+      <div className="flex justify-end">
+        <CreatePostButton />
+      </div>
       {loading ? (
-      <div className="flex justify-center items-center h-full">
-         <p>Loading...</p>
-       </div>
+        <div className="flex justify-center items-center h-full">
+          <p>Loading...</p>
+        </div>
       ) : (
         <div className="">
           {data &&
             data.map(
               (item: {
                 id: string;
-                name: string;
-                department: string;
-                content: string;
+                title: string;
+                description: string;
                 image: string;
-                like: number;
-                avatar:string;
+                upvotes: number;
               }) => (
                 <div key={item.id}>
                   <Cards
                     data={{
-                      name: item.name,
-                      avatar:item.avatar,
-                      department: item.department,
-                      content: item.content,
+                      id: item.id,
+                      title: item.title,
+                      description: item.description,
                       image: item.image,
-                      like: item.like,
+                      like: item.upvotes,
                     }}
                   />
                 </div>

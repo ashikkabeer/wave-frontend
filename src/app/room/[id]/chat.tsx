@@ -18,56 +18,69 @@ const SystemMessage = {
   author: "Creator",
   createdAt: new Date().setFullYear(2021, 10, 10),
 };
-const socket = io("http://localhost:3000");
+const socket = io('http://localhost:3000');
+
 interface ChatProps {
-  currentUser: string; // Adjust the type according to your needs
+  messages: Message[];
+  currentUser: string;
+  sendMessage: (message: string) => void;
 }
-export default function Chat({ currentUser }: ChatProps) {
-  const dummy = useRef();
-  const [inputValue, setinputValue] = useState("");
-  const [messages, setMessages] = useState([SystemMessage]);
+interface Message {
+  id: string;
+  author: string;
+  content: string;
+  role: string;
+  createdAt: Date;
+}
+export default function Chat({id}) {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState('');
 
   useEffect(() => {
-    socket.connect();
-
-    socket.on("connect", () => {
-      console.log("Socket connected");
-    });
-    socket.on("disconnect", () => {
-      console.log("Socket disconnected");
+    // Retrieve chat history when component mounts
+    socket.emit('getChatHistory');
+    socket.on('chatHistory', (history) => {
+      setMessages(history);
     });
 
-    socket.on("createMessage", (newMessage) => {
-      setMessages((previousMessages) => [...previousMessages, newMessage]);
+    // Listen for new messages
+    socket.on('message', (message) => {
+      setMessages((prevMessages) => [...prevMessages, message]);
     });
+
     return () => {
-      socket.off("connect");
-      socket.off("disconnect");
-      socket.off("createMessage");
+      // Clean up event listeners when component unmounts
+      socket.off('chatHistory');
+      socket.off('message');
     };
   }, []);
 
-  const handleSendMessage = (e) => {
-    if (e.key != "Enter" || inputValue.trim().length === 0) return;
-    console.log(e.target.value);
-    socket.emit("createMessage", {
-      author: "ashik",
-      content: inputValue.trim(),
+  const handleMessageSend = async () => {
+    // socket.emit('sendMessage', {
+    //   sender: 'User', 
+    //   content: newMessage,
+    // });
+
+    socket.emit('sendMessage', {
+      chatId: id,
+      username: 'syam',
+      content: newMessage,
+      role: 'faculty',
+      createdAt: new Date(),
     });
-    setinputValue("");
+
+    // Clear input field after sending message
+    setNewMessage('');
   };
-  const handleLogout = () => {
-    socket.disconnect();
-  };
+  // const handleLogout = () => {
+  //   socket.disconnect();
+  // };
   return (
     <div>
       <div className="w-full">
-        {messages.map((message, idx) => (
+        {messages.map((message) => (
           <div
-            key={idx}
-            className={`char-message ${
-              currentUser === message.author ? "justify-end" : ""
-            }`}
+            key={message.id} className={`char-message ${ 'syam' === message.author ? "justify-end" : "" }`}
           >
             <div className="w-3/4">
               <Card className="border-0 shadow-md  rounded-sm mt-2">
@@ -93,11 +106,11 @@ export default function Chat({ currentUser }: ChatProps) {
         <Input className="w-full"
           type="text"
           placeholder="type message here"
-          value={inputValue}
-          onChange={(e) => setinputValue(e.target.value)}
-          onKeyDown={handleSendMessage}
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
+          // onKeyDown={handleMessageSend}
         />
-        <Button className="" onClick={handleSendMessage}>Submit</Button>
+        <Button className="" onClick={handleMessageSend}>Submit</Button>
       </div>
     </div>
   );

@@ -32,24 +32,24 @@ export default function Cards({ data }: { data: any }) {
         <Card>
           <CardHeader>
             <div className="border-2 border-x-0 border-t-0 flex">
-              <AvatarComponent user={{ image: data.avatar }} />
+              {/* <AvatarComponent user={{ image: data.avatar }} /> */}
               <div className="ml-3">
                 <p className="font-medium m-0">{data.name}</p>
-                <p className="text-sm m-0 pb-2">{data.department}</p>
+                <p className="text-sm m-0 pb-2">{data.name}</p>
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <div className="border-2 border-x-0 border-t-0">
-              <p>{data.content}</p>
+              <p>{data.description}</p>
               {data.image && (
                 <div className="pic w-full h-full object-contain  animate-pop my-4">
                   <Image
                     className="w-full h-full object-cover"
-                    src={data.image}
+                    src="/public/base-logo.png"
                     width={500}
                     height={500}
-                    alt={data.name}
+                    alt={data.title}
                   />
                 </div>
               )}
@@ -63,7 +63,7 @@ export default function Cards({ data }: { data: any }) {
               >
                 <div className="flex gap-2">
                   <Heart color={`${liked ? "#ff0000" : "#000000"}`} />{" "}
-                  <p className="">{data.like}</p>
+                  <p className="">{data.upvotes}</p>
                 </div>
               </button>
               <button className="relative overflow-hidden px-5 text-white duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:translate-y-1 active:scale-x-110 active:scale-y-90">

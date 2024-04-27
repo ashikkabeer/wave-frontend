@@ -16,7 +16,7 @@ export function CreatePostButton() {
     <div className="w-full">
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button variant="outline">Create Room</Button>
+          <Button variant="outline">Create a post</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <CreatePostForm />

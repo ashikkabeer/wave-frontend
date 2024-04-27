@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import { redirect } from "next/navigation";
 export default function SignIn() {
+  console.log(localStorage.getItem("access_token"));
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     try {
       event.preventDefault();
@@ -17,7 +18,7 @@ export default function SignIn() {
       const values = Object.fromEntries(formData.entries());
 
       console.log("values", JSON.stringify(values));
-      const response = await fetch("http://localhost:3000/auth/signin", {
+      const response = await fetch("http://localhost:3000/auth/login", {
         headers: {
           "Content-Type": "application/json",
         },
@@ -28,7 +29,9 @@ export default function SignIn() {
 
       // Handle response if necessary
       const data = await response.json();
-      if (data) {
+      if (data.access_token) {
+        localStorage.setItem("access_token", data.access_token);
+        console.log("local storage", localStorage.getItem("access_token"));
         window.location.replace("/home");
       }
       console.log(data);
@@ -43,22 +46,12 @@ export default function SignIn() {
         <form className=" flex flex-col space-y-1" onSubmit={onSubmit}>
           <label htmlFor="username" className="flex flex-col">
             Username:{" "}
-            <Input
-              className="input"
-              type="text"
-              name="username"
-              placeholder="username"
-            />
+            <Input type="text" name="username" placeholder="username" />
           </label>
 
           <label htmlFor="password" className="flex flex-col">
             Password:{" "}
-            <Input
-              className="input"
-              type="password"
-              name="password"
-              placeholder="password"
-            />
+            <Input type="password" name="password" placeholder="password" />
           </label>
 
           <Button

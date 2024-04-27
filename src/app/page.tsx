@@ -1,9 +1,10 @@
 import Link from "next/link";
 import Hero from "@/components/hero";
+import GrainSVG from "@/components/gainSVG";
 export default function Home() {
   return (
     <main className=" w-screen flex min-h-screen flex-col items-center overflow-hidden justify-between">
-
+      {/* <GrainSVG /> */}
       <Hero
         data={{
           college: "Musaliar College of Engineering and Technology",

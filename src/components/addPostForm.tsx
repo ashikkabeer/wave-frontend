@@ -1,5 +1,5 @@
-import * as React from "react";
-
+"use client";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,16 +18,51 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-// {
-//     "title": "Is FLAT easy?",
-//     "description":"No i don't think so",
-//     "mentor": "Salitha",
-//     "author": "Ashik Kabeer",
-//     "semester": 6,
-//     "department": "CSE",
-//     "subject": "FLAT"
-// }
+
 export function CreatePostForm() {
+  //this should upload the image to an api and return the image url
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState(null);
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0]; // Access the first file if it exists
+    setImage(file); // Update the image state
+  };
+  const handleUpload = async (e) => {
+    console.log("uploading");
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    if (image) {
+      formData.append("image", image);
+    }
+
+    try {
+      const response = await fetch(
+        "http://localhost:3000/post/upload",
+        {
+          headers: {
+            authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+          method: "POST",
+          body: formData,
+        }
+      );
+      if (response.ok) {
+        console.log("Form data saved successfully!");
+      } else {
+        console.error("Failed to save form data");
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Card className="w-full">
       <CardHeader>
@@ -38,23 +73,33 @@ export function CreatePostForm() {
         <form>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Title</Label>
-              <Input id="name" placeholder="enter a title for your post" />
-            </div>
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Description</Label>
+              <Label htmlFor="title">Title</Label>
               <Input
-                id="name"
-                placeholder="enter your description for your post."
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Title"
               />
             </div>
-            <Label htmlFor="name">Select image to upload</Label>
-            <Input type="file"/>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="description">Description</Label>
+              <Input
+                value={description}
+                id="description"
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Description"
+              />
+            </div>
+            <Label htmlFor="image">Select image to upload</Label>
+            <Input type="file" onChange={handleFileChange} />
+
           </div>
         </form>
       </CardContent>
       <CardFooter className="flex justify-end">
-        <Button type="submit" className="w-full">Upload</Button>
+        <Button type="submit" className="w-full" onClick={handleUpload}>
+          Upload
+        </Button>
       </CardFooter>
     </Card>
   );
