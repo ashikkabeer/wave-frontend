@@ -4,7 +4,7 @@ import { io } from "socket.io-client";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { getToken, onMessage,getMessaging } from "firebase/messaging";
+import { getToken, onMessage, getMessaging } from "firebase/messaging";
 import { initializeApp } from "firebase/app";
 import BASE_URL from "../../../../BASE_URL";
 const firebaseConfig = {
@@ -46,9 +46,13 @@ export default function Chat({ id }: { id: string }) {
   useEffect(() => {
     // Retrieve chat history when component mounts
     const fetchCurrentUser = async () => {
-      const token = localStorage.getItem("access_token");
-      console.log(token);
-      const username = await fetch(BASE_URL+"/user/me", {
+      let token;
+      if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("access_token");
+      } else {
+        console.log("localStorage is not available.");
+      }
+      const username = await fetch(BASE_URL + "/user/me", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -62,7 +66,7 @@ export default function Chat({ id }: { id: string }) {
     // -------------------//////////////////---------------
     const getUsersTokens = async () => {
       //get all the tokens mapped to this chatroom
-      const response = await fetch(BASE_URL+`/chat/${id}`, {
+      const response = await fetch(BASE_URL + `/chat/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -87,7 +91,7 @@ export default function Chat({ id }: { id: string }) {
     }).then(async (currentToken) => {
       if (currentToken) {
         const fcmTokens = currentToken;
-        const response = await fetch(BASE_URL+`/chat/tokens`, {
+        const response = await fetch(BASE_URL + `/chat/tokens`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -108,7 +112,7 @@ export default function Chat({ id }: { id: string }) {
       console.log("Message received.", payload);
     });
     const getChatHistory = async () => {
-      const history = await fetch(BASE_URL+`/chat/${id}`, {
+      const history = await fetch(BASE_URL + `/chat/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,

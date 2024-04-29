@@ -52,8 +52,12 @@ export function SignUp() {
       // Handle response if necessary
       const data = await response.json();
       if (data.access_token) {
-        localStorage.setItem("access_token", data.access_token);
-        console.log("local storage", localStorage.getItem("access_token"));
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem("access_token", data.access_token);
+
+        } else {
+          console.log("localStorage is not available.");
+        }
         window.location.replace("/home");
       }
 

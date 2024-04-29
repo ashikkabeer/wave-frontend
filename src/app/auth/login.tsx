@@ -7,7 +7,6 @@ import { z } from "zod";
 import BASE_URL from "../../../BASE_URL";
 import { redirect } from "next/navigation";
 export default function SignIn() {
-  console.log(localStorage.getItem("access_token"));
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     try {
       event.preventDefault();
@@ -31,8 +30,11 @@ export default function SignIn() {
       // Handle response if necessary
       const data = await response.json();
       if (data.access_token) {
-        localStorage.setItem("access_token", data.access_token);
-        console.log("local storage", localStorage.getItem("access_token"));
+        if (typeof localStorage !== 'undefined') {
+          localStorage.setItem("access_token", data.access_token);
+        } else {
+          console.log("localStorage is not available.");
+        }
         window.location.replace("/home");
       }
       console.log(data);
