@@ -3,6 +3,7 @@ import Link from "next/link";
 import Chat from "./chat";
 import { CreateRoomButton } from "./createButton";
 import { useEffect, useState } from "react";
+import BASE_URL from "../../../BASE_URL";
 export default function Room() {
   interface ChatProps {
     _id: string;
@@ -24,7 +25,7 @@ export default function Room() {
       try {
         console.log("fetching");
         console.log(localStorage.getItem("access_token"));
-        const response = await fetch(`http://localhost:3000/chat/get`, {
+        const response = await fetch(BASE_URL+`/chat/get`, {
           method: "GET",
           mode: "cors",
           headers: {
