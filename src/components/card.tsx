@@ -34,8 +34,8 @@ export default function Cards({ data }: { data: any }) {
             <div className="border-2 border-x-0 border-t-0 flex">
               {/* <AvatarComponent user={{ image: data.avatar }} /> */}
               <div className="ml-3">
-                <p className="font-medium m-0">{data.name}</p>
-                <p className="text-sm m-0 pb-2">{data.name}</p>
+                <p className="font-medium m-0">{data.title}</p>
+                <p className="text-sm m-0 pb-2">{data.title}</p>
               </div>
             </div>
           </CardHeader>
@@ -46,7 +46,7 @@ export default function Cards({ data }: { data: any }) {
                 <div className="pic w-full h-full object-contain  animate-pop my-4">
                   <Image
                     className="w-full h-full object-cover"
-                    src="/public/base-logo.png"
+                    src={data.image}
                     width={500}
                     height={500}
                     alt={data.title}
@@ -56,7 +56,7 @@ export default function Cards({ data }: { data: any }) {
             </div>
           </CardContent>
           <CardFooter>
-            <div className="mx-5 w-full flex justify-between">
+            <div className="mx-5 w-full flex justify-center">
               <button
                 onClick={handleLike}
                 className="relative overflow-hidden px-5 text-black dark:text-white duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:translate-y-1 active:scale-x-110 active:scale-y-90"
@@ -66,12 +66,12 @@ export default function Cards({ data }: { data: any }) {
                   <p className="">{data.upvotes}</p>
                 </div>
               </button>
-              <button className="relative overflow-hidden px-5 text-white duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:translate-y-1 active:scale-x-110 active:scale-y-90">
+              {/* <button className="relative overflow-hidden px-5 text-white duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:translate-y-1 active:scale-x-110 active:scale-y-90">
                 <MessageCircle color="#000000" />
-              </button>
-              <button className="relative overflow-hidden px-5 text-white duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:translate-y-1 active:scale-x-110 active:scale-y-90">
+              </button> */}
+              {/* <button className="relative overflow-hidden px-5 text-white duration-300 [transition-timing-function:cubic-bezier(0.175,0.885,0.32,1.275)] active:translate-y-1 active:scale-x-110 active:scale-y-90">
                 <Send color="#000000" />
-              </button>
+              </button> */}
             </div>
           </CardFooter>
         </Card>

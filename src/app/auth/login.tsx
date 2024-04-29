@@ -4,6 +4,7 @@ import { FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
+import BASE_URL from "../../../BASE_URL";
 import { redirect } from "next/navigation";
 export default function SignIn() {
   console.log(localStorage.getItem("access_token"));
@@ -18,7 +19,7 @@ export default function SignIn() {
       const values = Object.fromEntries(formData.entries());
 
       console.log("values", JSON.stringify(values));
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch(BASE_URL+"/auth/login", {
         headers: {
           "Content-Type": "application/json",
         },

@@ -1,4 +1,5 @@
 "use client";
+import Link from 'next/link'
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,14 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
+import BASE_URL from '../../BASE_URL';
 export function CreatePostForm() {
   //this should upload the image to an api and return the image url
   const [loading, setLoading] = useState<boolean>(false);
@@ -26,11 +20,11 @@ export function CreatePostForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
-  const handleFileChange = (e) => {
+  const handleFileChange = (e:any) => {
     const file = e.target.files?.[0]; // Access the first file if it exists
     setImage(file); // Update the image state
   };
-  const handleUpload = async (e) => {
+  const handleUpload = async (e:any) => {
     console.log("uploading");
     e.preventDefault();
 
@@ -43,7 +37,7 @@ export function CreatePostForm() {
 
     try {
       const response = await fetch(
-        "http://localhost:3000/post/upload",
+        BASE_URL+"/post/upload",
         {
           headers: {
             authorization: "Bearer " + localStorage.getItem("access_token"),
@@ -56,6 +50,12 @@ export function CreatePostForm() {
         console.log("Form data saved successfully!");
       } else {
         console.error("Failed to save form data");
+      }
+      if (response.status === 200) {
+        //redirect to /home
+        console.log("redirecting to /home");
+        <Link href="/home" />;
+
       }
     } catch (error) {
       console.error(error);

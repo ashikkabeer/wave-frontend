@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
+import BASE_URL from "../../../BASE_URL";
 export function SignUp() {
   const [formData, setFormData] = useState({
     name: "",
@@ -39,7 +40,7 @@ export function SignUp() {
       const values = Object.fromEntries(formData.entries());
 
       console.log("values", JSON.stringify(values));
-      const response = await fetch("http://localhost:3000/auth/signup", {
+      const response = await fetch(BASE_URL+"/auth/signup", {
         headers: {
           "Content-Type": "application/json",
         },

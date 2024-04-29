@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Cards from "@/components/card";
 import { CreatePostButton } from "@/components/createPostButton";
+import BASE_URL from "../../../BASE_URL";
 export default function HomePage() {
   // api-> https://65d90abac96fbb24c1bcb008.mockapi.io/api/v1/posts
   const [data, setData] = useState([]);
@@ -11,13 +12,14 @@ export default function HomePage() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://localhost:3000/post/", {
+          BASE_URL+"/post", {
             headers: {
               "Content-Type": "application/json",
               "Authorization": "Bearer " + localStorage.getItem("access_token"),
             },
-            method: "GET",
             mode: "cors",
+            method: "GET",
+            
           }
         );
         console.log(response)
