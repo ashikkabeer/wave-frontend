@@ -5,6 +5,8 @@ import { CreateRoomButton } from "./createButton";
 import { useEffect, useState } from "react";
 import BASE_URL from "../../../BASE_URL";
 export default function Room() {
+  const [currentRole, setCurrentRole] = useState(null);
+
   interface ChatProps {
     _id: string;
     title: string;
@@ -19,8 +21,22 @@ export default function Room() {
   console.log(typeof chatrooms);
 
   useEffect(() => {
-    const batch = 2021;
-    const department = "cse";
+    const fetchCurrentUser = async () => {
+      let token;
+      if (typeof localStorage !== "undefined") {
+        token = localStorage.getItem("access_token");
+      } else {
+        console.log("localStorage is not available.");
+      }
+      const username = await fetch(BASE_URL + "/user/me", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const res = await username.json();
+      setCurrentRole(res.role);
+    };
     const fetchChatrooms = async () => {
       try {
         console.log("fetching");
@@ -43,8 +59,9 @@ export default function Room() {
         console.error("Error fetching chatrooms:", error);
       }
     };
+    fetchCurrentUser();
     fetchChatrooms();
-  }, []);
+  }, [currentRole, chatrooms]);
   return (
     <main className="w-screen flex justify-center items-center">
       <div className="w-full flex flex-col justify-center items-center">

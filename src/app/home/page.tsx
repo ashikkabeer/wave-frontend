@@ -54,6 +54,7 @@ export default function HomePage() {
                 description: string;
                 image: string;
                 upvotes: number;
+                date: string;
               }) => (
                 <div key={item.id}>
                   <Cards
@@ -63,6 +64,7 @@ export default function HomePage() {
                       description: item.description,
                       image: item.image,
                       like: item.upvotes,
+                      date: item.date,
                     }}
                   />
                 </div>

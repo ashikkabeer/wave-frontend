@@ -38,7 +38,10 @@ export function SignUp() {
       console.log("formData", formData);
 
       const values = Object.fromEntries(formData.entries());
-
+      if (!values.email.toString().endsWith('@musaliar.edu')) {
+        alert('Username must end with @musaliar.edu');
+        return;
+      }
       console.log("values", JSON.stringify(values));
       const response = await fetch(BASE_URL+"/auth/signup", {
         headers: {

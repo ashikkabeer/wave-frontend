@@ -35,7 +35,7 @@ export default function Cards({ data }: { data: any }) {
               {/* <AvatarComponent user={{ image: data.avatar }} /> */}
               <div className="ml-3">
                 <p className="font-medium m-0">{data.title}</p>
-                <p className="text-sm m-0 pb-2">{data.title}</p>
+                <p className="text-sm m-0 pb-2">{data.date}</p>
               </div>
             </div>
           </CardHeader>

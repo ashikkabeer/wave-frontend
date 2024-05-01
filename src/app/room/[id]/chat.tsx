@@ -143,7 +143,7 @@ export default function Chat({ id }: { id: string }) {
       username: currentUser,
       role: currentRole,
       content: newMessage,
-      createdAt: new Date(),
+      createdAt: new Date().getUTCMinutes(),
     });
     //send notification logic
     const message = {
@@ -200,7 +200,7 @@ export default function Chat({ id }: { id: string }) {
                         }
                       })}
                     <div className="flex justify-end">
-                      <p className="select-none text-sm">20:30s</p>
+                      {/* <p className="select-none text-sm">{message.date}</p> */}
                     </div>
                   </div>
                 </CardContent>

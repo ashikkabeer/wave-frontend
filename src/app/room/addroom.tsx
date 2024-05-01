@@ -20,17 +20,45 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FormEvent } from "react";
+import { FormEvent,useEffect } from "react";
 import BASE_URL from "../../../BASE_URL";
+import { set } from "zod";
 
 export function AddRoomForm() {
+  const [mentors, setMentors] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     mentor: "",
     subject: "",
   });
-
+  interface Mentors {
+    id: string;
+    name: string;
+  }
+  useEffect(() => {
+    const fetchMentors = async () => {
+      try {
+        const response = await fetch(BASE_URL + '/user/mentors',{
+          headers: {
+            method: "GET",
+            mode: "cors",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        })
+        if (!response.ok) {
+          throw new Error("Failed to fetch chatrooms");
+        }
+        const mentors = await response.json();
+        console.log('mentors',mentors)
+        setMentors(mentors);
+      } catch (error) {
+        console.error("Error fetching mentors:", error);
+      }
+    }
+    fetchMentors();
+    },[]);
   const handleValueChange = (name: string, value: string) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -104,10 +132,10 @@ export function AddRoomForm() {
                 </SelectTrigger>
                 <SelectContent position="popper">
                   <SelectItem value="salitha">Salitha M K</SelectItem>
-                  <SelectItem value="Usha">Usha</SelectItem>
-                  <SelectItem value="Harsha">Harsha</SelectItem>
-                  <SelectItem value="Deepa">Deepa</SelectItem>
-                  <SelectItem value="Giri">Giri</SelectItem>
+                  {mentors.map((mentor: { id: string, name: string }) => (
+                    <SelectItem key={mentor.id} value={mentor.name}>{mentor.name}</SelectItem>
+                  
+                  ))}
                 </SelectContent>
               </Select>
             </div>
