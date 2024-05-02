@@ -1,9 +1,10 @@
 "use client";
 import { useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 const MagneticTab = ({ item }: { item: { id: number; text: string } }) => {
+  const router = useRouter();
   const ref = useRef<HTMLButtonElement>(null);
 
   const [hoverPosition, setHoverPosition] = useState({
@@ -24,12 +25,12 @@ const MagneticTab = ({ item }: { item: { id: number; text: string } }) => {
   const onMouseOut = () => {
     setHoverPosition({ x: 0, y: 0, opacity: 0 });
   };
-
+  // router.push();
   return (
     <>
       <Link
         // href="/home"
-        href={item.text.toLowerCase()}
+        href={"/" + item.text.toLowerCase()}
         className="relative h-9"
         // onMouseMove={handleMouseMove}
         onMouseLeave={onMouseOut}
@@ -40,7 +41,8 @@ const MagneticTab = ({ item }: { item: { id: number; text: string } }) => {
         <div
           className="absolute h-full w-full rounded-[4px] transition-opacity"
           aria-hidden="true"
-          style={{backgroundColor: 'transparent',
+          style={{
+            backgroundColor: "transparent",
             transform: `translate(${hoverPosition.x}px, ${hoverPosition.y}px)`,
             opacity: hoverPosition.opacity,
           }}
@@ -58,7 +60,7 @@ const tabs = [
 
 export default function NavBar() {
   const pathname = usePathname();
-  if (pathname!='/auth' && pathname != "/" ) {
+  if (pathname != "/auth" && pathname != "/") {
     return (
       <div>
         <div className="flex flex-row ">
@@ -69,5 +71,5 @@ export default function NavBar() {
       </div>
     );
   }
-  return null
+  return null;
 }

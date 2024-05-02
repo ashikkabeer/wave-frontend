@@ -2,6 +2,7 @@
 import { FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -12,6 +13,7 @@ import {
 import { useState } from "react";
 import BASE_URL from "../../../BASE_URL";
 export function SignUp() {
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: "",
     username: "",
@@ -32,18 +34,16 @@ export function SignUp() {
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     try {
       event.preventDefault();
-      console.log(event.defaultPrevented);
-
       const formData = new FormData(event.currentTarget);
       console.log("formData", formData);
 
       const values = Object.fromEntries(formData.entries());
-      if (!values.email.toString().endsWith('@musaliar.edu')) {
-        alert('Username must end with @musaliar.edu');
+      if (!values.email.toString().endsWith("@musaliar.edu")) {
+        alert("Username must end with @musaliar.edu");
         return;
       }
       console.log("values", JSON.stringify(values));
-      const response = await fetch(BASE_URL+"/auth/signup", {
+      const response = await fetch(BASE_URL + "/auth/signup", {
         headers: {
           "Content-Type": "application/json",
         },
@@ -51,17 +51,20 @@ export function SignUp() {
         mode: "cors",
         body: JSON.stringify(values),
       });
+      if (response.status !== 200) {
+        alert("Username or emailid already exists");
+        return;
+      }
 
       // Handle response if necessary
       const data = await response.json();
       if (data.access_token) {
-        if (typeof localStorage !== 'undefined') {
+        if (typeof localStorage !== "undefined") {
           localStorage.setItem("access_token", data.access_token);
-
         } else {
           console.log("localStorage is not available.");
         }
-        window.location.replace("/home");
+        router.push("/home");
       }
 
       console.log(data.access_token);

@@ -1,24 +1,20 @@
 "use client";
 import { FormEvent } from "react";
-
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
 import BASE_URL from "../../../BASE_URL";
-import { redirect } from "next/navigation";
 export default function SignIn() {
+  const router = useRouter();
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     try {
       event.preventDefault();
-      console.log(event.defaultPrevented);
-
       const formData = new FormData(event.currentTarget);
       console.log("formData", formData);
-
       const values = Object.fromEntries(formData.entries());
-
       console.log("values", JSON.stringify(values));
-      const response = await fetch(BASE_URL+"/auth/login", {
+      const response = await fetch(BASE_URL + "/auth/login", {
         headers: {
           "Content-Type": "application/json",
         },
@@ -30,12 +26,12 @@ export default function SignIn() {
       // Handle response if necessary
       const data = await response.json();
       if (data.access_token) {
-        if (typeof localStorage !== 'undefined') {
+        if (typeof localStorage !== "undefined") {
           localStorage.setItem("access_token", data.access_token);
         } else {
           console.log("localStorage is not available.");
         }
-        window.location.replace("/home");
+        router.push("/home");
       }
       console.log(data);
     } catch (error) {
@@ -61,7 +57,7 @@ export default function SignIn() {
             className="py-2 rounded bg-primary text-primary-foreground hover:bg-primary/90"
             type="submit"
           >
-            Signin
+            Login
           </Button>
         </form>
       </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -19,15 +19,9 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
-
-// const socket = io("http://localhost:3000");
 const socket = io(BASE_URL);
+import { Badge } from "@/components/ui/badge";
 
-// interface ChatProps {
-//   messages: Message[];
-//   currentUser: string;
-//   sendMessage: (message: string) => void;
-// }
 interface Message {
   userId: string;
   username: string;
@@ -42,7 +36,13 @@ export default function Chat({ id }: { id: string }) {
   const [currentRole, setCurrentRole] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [subscribedUser, setSubscribedUser] = useState(null);
-
+  const chatWindowRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const chatWindow = chatWindowRef.current;
+    if (chatWindow) {
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    }
+  }, [messages]);
   useEffect(() => {
     // Retrieve chat history when component mounts
     const fetchCurrentUser = async () => {
@@ -52,8 +52,10 @@ export default function Chat({ id }: { id: string }) {
       } else {
         console.log("localStorage is not available.");
       }
+      console.log("token", token);
       const username = await fetch(BASE_URL + "/user/me", {
         method: "GET",
+        mode: "cors",
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -65,8 +67,7 @@ export default function Chat({ id }: { id: string }) {
     };
     // -------------------//////////////////---------------
     const getUsersTokens = async () => {
-      //get all the tokens mapped to this chatroom
-      const response = await fetch(BASE_URL + `/chat/${id}`, {
+      const response = await fetch(BASE_URL + `/chat/tokens/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -85,48 +86,63 @@ export default function Chat({ id }: { id: string }) {
       });
     };
 
-    getToken(messaging, {
-      vapidKey:
-        "BCHgGR0weZ4iq8JHpkgFqwsc-9C047OW7ifIWFz5UAB-J173Fd9JrE-SZP0jo-dHu9lPb1Rn17Vy0BEdTEEPPb8",
-    }).then(async (currentToken) => {
-      if (currentToken) {
-        const fcmTokens = currentToken;
-        const response = await fetch(BASE_URL + `/chat/tokens`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-          body: JSON.stringify({ fcmTokens, chatroomId: id }),
-        });
-        const res = await response.json();
-        console.log("current token for client: ", currentToken);
-      } else {
-        console.log(
-          "No registration token available. Request permission to generate one."
-        );
-        requestPermission();
-      }
-    });
+    // getToken(messaging, {
+    //   vapidKey:
+    //     "BCHgGR0weZ4iq8JHpkgFqwsc-9C047OW7ifIWFz5UAB-J173Fd9JrE-SZP0jo-dHu9lPb1Rn17Vy0BEdTEEPPb8",
+    // }).then(async (currentToken) => {
+    //   if (currentToken) {
+    //     const fcmTokens = currentToken;
+    //     const response = await fetch(BASE_URL + `/chat/tokens/`, {
+    //       method: "POST",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+    //       },
+    //       body: JSON.stringify({ fcmTokens, chatroomId: id }),
+    //     });
+    //     const res = await response.json();
+    //     console.log("current token for client: ", currentToken);
+    //   } else {
+    //     console.log(
+    //       "No registration token available. Request permission to generate one."
+    //     );
+    //     requestPermission();
+    //   }
+    // });
     onMessage(messaging, (payload) => {
       console.log("Message received.", payload);
     });
     const getChatHistory = async () => {
-      const history = await fetch(BASE_URL + `/chat/${id}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      });
-      const res = await history.json();
-      setMessages(res.messages);
+      try {
+        let token;
+        if (typeof localStorage !== "undefined") {
+          token = localStorage.getItem("access_token");
+        } else {
+          console.log("localStorage is not available.");
+        }
+        const history = await fetch(BASE_URL + `/chat/${id}`, {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (history.ok) {
+          const res = await history.json();
+          setMessages(res.messages);
+        } else {
+          setMessages([]);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     // Listen for new messages
     socket.on("message", (message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
-    getUsersTokens();
+    // getUsersTokens();
     getChatHistory();
     fetchCurrentUser();
     return () => {
@@ -145,16 +161,6 @@ export default function Chat({ id }: { id: string }) {
       content: newMessage,
       createdAt: new Date().getUTCMinutes(),
     });
-    //send notification logic
-    const message = {
-      topic: id,
-      notification: {
-        body: currentUser + "has sent a message",
-        title: "New Message from Wave",
-      },
-      //get the tokens from the backend
-      tokens: ["token1", "token2"],
-    };
 
     setNewMessage("");
   };
@@ -162,56 +168,76 @@ export default function Chat({ id }: { id: string }) {
   //   socket.disconnect();
   // };
   return (
-    <div>
-      <div className="w-full">
-        {messages.map((message) => (
-          <div
-            key={message.userId}
-            className={`flex ${
-              message.username === currentUser ? "justify-end bg-red" : ""
-            }`}
-          >
-            <div className="w-3/4">
-              <Card className="rounded mb-4">
-                <CardHeader className="my-0 py-0">
-                  <span className="italic pt-3 underline select-none font-medium text-primary">
-                    {message.username}
-                  </span>
-                </CardHeader>
-                <CardContent>
-                  <div className="">
-                    {message.content
-                      .split(/(https?:\/\/[^\s]+)/g)
-                      .map((text, index) => {
-                        if (text.match(/(https?:\/\/[^\s]+)/g)) {
-                          return (
-                            <a
-                              className="text-blue-500 underline"
-                              href={text}
-                              key={index}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {text}
-                            </a>
-                          );
-                        } else {
-                          return text;
-                        }
-                      })}
-                    <div className="flex justify-end">
-                      {/* <p className="select-none text-sm">{message.date}</p> */}
+    <div className="chat-container">
+      <div className="w-full chat-window" ref={chatWindowRef}>
+        {messages.length === 0 ? (
+          <div>No Messages Available</div>
+        ) : (
+          messages.map((message) => (
+            <div
+              key={message.userId}
+              className={`flex ${
+                message.username === currentUser ? "justify-end" : ""
+              }`}
+            >
+              <div className="w-3/4">
+                <Card className="rounded mb-4">
+                  <CardHeader className="my-0 py-0">
+                    <span className="italic pt-3 underline select-none font-medium text-primary">
+                      {message.username}
+                      {""}
+                      <Badge
+                        variant="outline"
+                        className={`ml-5 ${
+                          message.role === "faculty"
+                            ? "font-bold bg-primary text-white"
+                            : "invisible"
+                        }`}
+                      >
+                        {message.role}
+                      </Badge>
+                    </span>
+                  </CardHeader>
+                  <CardContent>
+                    <div
+                      className={`${
+                        message.role === "faculty" ? "hover:bg-gray-100" : ""
+                      }`}
+                    >
+                      {message.content
+                        .split(/(https?:\/\/[^\s]+)/g)
+                        .map((text, index) => {
+                          if (text.match(/(https?:\/\/[^\s]+)/g)) {
+                            return (
+                              <a
+                                className="text-blue-500 underline"
+                                href={text}
+                                key={index}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                              >
+                                {text}
+                              </a>
+                            );
+                          } else {
+                            return text;
+                          }
+                        })}
+                      <div className="flex justify-end">
+                        {/* <p className="select-none text-sm">{message.date}</p> */}
+                      </div>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        )}
       </div>
-      <div className="bottom-0 gap-3 flex justify-center w-2/4 fixed">
+      <div className="flex mt-10 w-full"></div>
+      <div className="bottom-0 gap-3 w-screen pt-5  bg-white flex flex-row fixed">
         <Input
-          className="w-full"
+          className="md:w-1/2 w-3/4"
           type="text"
           placeholder="type message here"
           value={newMessage}

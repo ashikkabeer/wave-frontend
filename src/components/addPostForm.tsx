@@ -1,5 +1,5 @@
 "use client";
-import Link from 'next/link'
+import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,19 +12,23 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import BASE_URL from '../../BASE_URL';
+import BASE_URL from "../../BASE_URL";
+import { useRouter } from "next/navigation";
 export function CreatePostForm() {
+  const router = useRouter();
   //this should upload the image to an api and return the image url
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
-  const handleFileChange = (e:any) => {
+  const handleFileChange = (e: any) => {
     const file = e.target.files?.[0]; // Access the first file if it exists
     setImage(file); // Update the image state
   };
-  const handleUpload = async (e:any) => {
+
+  const handleUpload = async (e: any) => {
+    setLoading(true);
     console.log("uploading");
     e.preventDefault();
 
@@ -36,26 +40,23 @@ export function CreatePostForm() {
     }
 
     try {
-      const response = await fetch(
-        BASE_URL+"/post/upload",
-        {
-          headers: {
-            authorization: "Bearer " + localStorage.getItem("access_token"),
-          },
-          method: "POST",
-          body: formData,
-        }
-      );
+      const response = await fetch(BASE_URL + "/post/upload", {
+        headers: {
+          authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+        method: "POST",
+        body: formData,
+      });
       if (response.ok) {
         console.log("Form data saved successfully!");
       } else {
         console.error("Failed to save form data");
+        alert("Failed to save form data");
       }
       if (response.status === 200) {
         //redirect to /home
         console.log("redirecting to /home");
-        <Link href="/home" />;
-
+        router.push("/home");
       }
     } catch (error) {
       console.error(error);
@@ -73,6 +74,12 @@ export function CreatePostForm() {
         <form>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
+              {loading && (
+                <p className="text-3xl italic text-red-700 items-center">
+                  Uploading...
+                </p>
+              )}
+
               <Label htmlFor="title">Title</Label>
               <Input
                 id="title"
@@ -92,7 +99,6 @@ export function CreatePostForm() {
             </div>
             <Label htmlFor="image">Select image to upload</Label>
             <Input type="file" onChange={handleFileChange} />
-
           </div>
         </form>
       </CardContent>
@@ -100,6 +106,7 @@ export function CreatePostForm() {
         <Button type="submit" className="w-full" onClick={handleUpload}>
           Upload
         </Button>
+        <br />
       </CardFooter>
     </Card>
   );
