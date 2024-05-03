@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Button } from "./ui/button";
 const MagneticTab = ({ item }: { item: { id: number; text: string } }) => {
   const router = useRouter();
   const ref = useRef<HTMLButtonElement>(null);
@@ -59,14 +60,26 @@ const tabs = [
 ];
 
 export default function NavBar() {
+  const router = useRouter();
+  function handleLogout() {
+    // Remove the token from local storage
+    localStorage.removeItem("access_token");
+
+    router.push("/auth");
+  }
   const pathname = usePathname();
   if (pathname != "/auth" && pathname != "/") {
     return (
-      <div>
+      <div className="flex">
         <div className="flex flex-row ">
           {tabs.map((item) => (
             <MagneticTab key={item.id} item={item} />
           ))}
+        </div>
+        <div className="button">
+          <Button variant={"link"} onClick={handleLogout}>
+            Logout
+          </Button>
         </div>
       </div>
     );

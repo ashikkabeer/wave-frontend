@@ -37,12 +37,17 @@ export default function Chat({
                 created by{" "}
                 <span className="bg-primary-foreground">{author}</span>
               </p>
-              <p className="bg-primary text-white p-2 rounded-full mr-2">
-                Batch: {batch}, {department}
-              </p>
+              <div className="flex flex-col">
+                <p className="underline">Batch: {batch}</p>
+                <p className="bg-primary text-white p-2 rounded mr-2">
+                  {department}
+                </p>
+              </div>
             </div>
             <p>Mentor: {mentor}</p>
-            <p>Subject: {subject}</p>
+            <p className="text-primary font-medium underline">
+              Subject: {subject}
+            </p>
           </CardContent>
         </Card>
       </div>

@@ -31,7 +31,7 @@ export default function HomePage() {
     };
 
     fetchData();
-  }, []);
+  }, [data]);
 
   return (
     <main className="">

@@ -4,11 +4,15 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { z } from "zod";
+import { useState } from "react";
 import BASE_URL from "../../../BASE_URL";
+import { RotateSpinner } from "react-spinners-kit";
 export default function SignIn() {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     try {
+      setLoading(true);
       event.preventDefault();
       const formData = new FormData(event.currentTarget);
       console.log("formData", formData);
@@ -22,6 +26,9 @@ export default function SignIn() {
         mode: "cors",
         body: JSON.stringify(values),
       });
+      if (!response.ok) {
+        alert("Invalid username or password");
+      }
 
       // Handle response if necessary
       const data = await response.json();
@@ -36,6 +43,8 @@ export default function SignIn() {
       console.log(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -60,6 +69,11 @@ export default function SignIn() {
             Login
           </Button>
         </form>
+        {loading && (
+          <div className="flex justify-center items-center">
+            <RotateSpinner size={50} color="#A020F0" loading={loading} />
+          </div>
+        )}
       </div>
     </div>
   );

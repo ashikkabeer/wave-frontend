@@ -22,26 +22,30 @@ export default function Room() {
 
   useEffect(() => {
     const fetchCurrentUser = async () => {
-      let token;
-      if (typeof localStorage !== "undefined") {
-        token = localStorage.getItem("access_token");
-      } else {
-        console.log("localStorage is not available.");
+      try {
+        let token;
+        if (typeof localStorage !== "undefined") {
+          token = localStorage.getItem("access_token");
+        } else {
+          console.log("localStorage is not available.");
+        }
+        const username = await fetch(BASE_URL + "/user/me", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const res = await username.json();
+        setCurrentRole(res.role);
+      } catch (error) {
+        console.log("Error fetching current user", error);
       }
-      const username = await fetch(BASE_URL + "/user/me", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const res = await username.json();
-      setCurrentRole(res.role);
     };
     const fetchChatrooms = async () => {
       try {
         console.log("fetching");
         console.log(localStorage.getItem("access_token"));
-        const response = await fetch(BASE_URL+`/chat/get`, {
+        const response = await fetch(BASE_URL + `/chat/get`, {
           method: "GET",
           mode: "cors",
           headers: {

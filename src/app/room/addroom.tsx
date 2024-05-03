@@ -20,12 +20,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FormEvent,useEffect } from "react";
+import { FormEvent, useEffect } from "react";
 import BASE_URL from "../../../BASE_URL";
 import { set } from "zod";
 
 export function AddRoomForm() {
   const [mentors, setMentors] = useState([]);
+  const [subjects, setSubjects] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -37,28 +38,51 @@ export function AddRoomForm() {
     name: string;
   }
   useEffect(() => {
-    const fetchMentors = async () => {
+    const fetchSubjects = async () => {
       try {
-        const response = await fetch(BASE_URL + '/user/mentors',{
+        const response = await fetch(BASE_URL + "/user/subjects", {
           headers: {
             method: "GET",
             mode: "cors",
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
-        })
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch chatrooms");
         }
         const mentors = await response.json();
-        console.log('mentors',mentors)
+        console.log("mentors", mentors);
+        setSubjects(mentors);
+      } catch (error) {
+        console.error("Error fetching mentors:", error);
+      }
+    };
+    fetchSubjects();
+  }, []);
+  useEffect(() => {
+    const fetchMentors = async () => {
+      try {
+        const response = await fetch(BASE_URL + "/user/mentors", {
+          headers: {
+            method: "GET",
+            mode: "cors",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error("Failed to fetch chatrooms");
+        }
+        const mentors = await response.json();
+        console.log("mentors", mentors);
         setMentors(mentors);
       } catch (error) {
         console.error("Error fetching mentors:", error);
       }
-    }
+    };
     fetchMentors();
-    },[]);
+  }, []);
   const handleValueChange = (name: string, value: string) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -77,7 +101,7 @@ export function AddRoomForm() {
       const values = Object.fromEntries(formData.entries());
 
       console.log("values", JSON.stringify(values));
-      const response = await fetch(BASE_URL+"/chat/create", {
+      const response = await fetch(BASE_URL + "/chat/create", {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -131,10 +155,10 @@ export function AddRoomForm() {
                   <SelectValue placeholder="choose mentor" />
                 </SelectTrigger>
                 <SelectContent position="popper">
-                  <SelectItem value="salitha">Salitha M K</SelectItem>
-                  {mentors.map((mentor: { id: string, name: string }) => (
-                    <SelectItem key={mentor.id} value={mentor.name}>{mentor.name}</SelectItem>
-                  
+                  {mentors.map((mentor: { id: string; name: string }) => (
+                    <SelectItem key={mentor.id} value={mentor.name}>
+                      {mentor.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -149,10 +173,20 @@ export function AddRoomForm() {
                   <SelectValue placeholder="Select" />
                 </SelectTrigger>
                 <SelectContent position="popper">
-                  <SelectItem value="AAD">AAD</SelectItem>
-                  <SelectItem value="CGIP">CGIP</SelectItem>
-                  <SelectItem value="CD">CD</SelectItem>
-                  <SelectItem value="Python">Python</SelectItem>
+                  {/* {subjects.map(
+                    (subject: { _id: string; subjects: string }) => {
+                      return (
+                        <SelectItem key={subject._id} value={subject.subjects}>
+                          {subject.subjects}
+                        </SelectItem>
+                      );
+                    }
+                  )} */}
+                  <SelectItem value="AAD"> AAD </SelectItem>
+                  <SelectItem value="Python"> Python </SelectItem>
+                  <SelectItem value="CGIP"> CGIP </SelectItem>
+                  <SelectItem value="CD"> CD </SelectItem>
+                  <SelectItem value="Economics"> Economics </SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -6,13 +6,15 @@ import { useState, useEffect } from "react";
 import { CreateEventButton } from "./createEventButton";
 import BASE_URL from "../../../BASE_URL";
 import { RotateSpinner } from "react-spinners-kit";
-
+import { useRouter } from "next/navigation";
 export default function EventPage() {
   const [currentUser, setCurrentUser] = useState(null);
   const [currentRole, setCurrentRole] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const router = useRouter();
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -24,6 +26,9 @@ export default function EventPage() {
           mode: "cors",
           method: "GET",
         });
+        if (!response.ok) {
+          router.push("/auth");
+        }
         console.log("response", response);
         const result = await response.json();
         console.log(result);
@@ -36,7 +41,7 @@ export default function EventPage() {
     };
 
     fetchData();
-  }, []);
+  }, [data, router]);
   useEffect(() => {
     // Retrieve chat history when component mounts
     const fetchCurrentUser = async () => {
