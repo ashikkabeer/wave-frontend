@@ -9,7 +9,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Wave",
-  description: "eveything but facebook",
+  description: "For Musaliar College",
 };
 
 import ModeToggle from "@/components/toggle";
@@ -27,7 +27,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="nav pt-5 flex w-screen justify-center">
+          <div className="navpt-5 flex w-screen justify-center">
             <div className="w-full">
               <Image
                 src="/base-logo.png"

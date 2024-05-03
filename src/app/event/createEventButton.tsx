@@ -7,18 +7,18 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { Button } from "@/components/ui/button";
-import { CreatePostForm } from "./addPostForm";
-export function CreatePostButton() {
+import { AddRoomForm } from "./addEventsForm";
+export function CreateEventButton() {
   return (
     <div className="">
       <AlertDialog>
         <AlertDialogTrigger asChild>
           <Button variant="default" className="font-bold px-10">
-            Create a post
+            Create an Event
           </Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
-          <CreatePostForm />
+          <AddRoomForm />
           <AlertDialogCancel>Go Back</AlertDialogCancel>
         </AlertDialogContent>
       </AlertDialog>

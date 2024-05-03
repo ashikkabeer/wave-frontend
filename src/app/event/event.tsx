@@ -6,29 +6,54 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
-export default function EventHeader() {
+import { CreateEventButton } from "./createEventButton";
+import { useState } from "react";
+import BASE_URL from "../../../BASE_URL";
+export default function EventHeader({ data }: { data: any }) {
+  const [interest, setInterest] = useState(false);
+  const handleInterest = async () => {
+    if (!interest) {
+      setInterest(!interest);
+      const response = await fetch(BASE_URL + `/event/${data.id}/interest`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
+        mode: "cors",
+        method: "POST",
+      });
+      const result = await response.json();
+      console.log(result);
+    }
+  };
   return (
     <main className="w-full">
       <div className="">
         <Card className="">
           <CardHeader>
-            <CardTitle>Aavishkar Tech-Fest</CardTitle>
+            <CardTitle>{data.name}</CardTitle>
             <CardDescription className="w-3/4">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Modi qui
-              fuga veritatis dolorum accusamus, dolorem minima quas hic
-              similique, voluptatibus vitae tempora, blanditiis ipsum veniam
-              quidem dignissimos eius! Esse praesentium totam nam?
+              {data.description}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="flex justify-between">
-              <p>23 January 2024</p>
-              <p className="bg-green-600 text-white p-2 rounded-full mr-2">
-                Interested
+              <p>{data.date}</p>
+              <p
+                onClick={handleInterest}
+                className={`${
+                  interest === true
+                    ? "bg-green-600 text-white p-2 rounded-full mr-2"
+                    : "bg-red-400  text-white p-2 rounded-full mr-2"
+                }`}
+              >
+                {" "}
+                {interest && <div className="select-none">Interested</div>}
+                {!interest && <div className="select-none">Not Interested</div>}
               </p>
             </div>
-            <p>Venue: Musaliar College of Engineering and Technology</p>
+            <p>Venue: {data.location}</p>
+            <p>Host: {data.createdBy}</p>
           </CardContent>
         </Card>
       </div>

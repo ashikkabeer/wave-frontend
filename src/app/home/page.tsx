@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Cards from "@/components/card";
 import { CreatePostButton } from "@/components/createPostButton";
 import BASE_URL from "../../../BASE_URL";
+import { RotateSpinner } from "react-spinners-kit";
 export default function HomePage() {
   // api-> https://65d90abac96fbb24c1bcb008.mockapi.io/api/v1/posts
   const [data, setData] = useState([]);
@@ -11,18 +12,15 @@ export default function HomePage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          BASE_URL+"/post", {
-            headers: {
-              "Content-Type": "application/json",
-              "Authorization": "Bearer " + localStorage.getItem("access_token"),
-            },
-            mode: "cors",
-            method: "GET",
-            
-          }
-        );
-        console.log(response)
+        const response = await fetch(BASE_URL + "/post", {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + localStorage.getItem("access_token"),
+          },
+          mode: "cors",
+          method: "GET",
+        });
+        console.log(response);
         const result = await response.json();
         setData(result);
       } catch (error) {
@@ -36,13 +34,15 @@ export default function HomePage() {
   }, []);
 
   return (
-    <main>
-      <div className="flex justify-end">
+    <main className="">
+      <div className="w-screen flex justify-center">
         <CreatePostButton />
       </div>
       {loading ? (
-        <div className="flex justify-center items-center h-full">
-          <p>Loading...</p>
+        <div className="w-screen h-screen">
+          <div className="w-full h-full flex justify-center items-center">
+            <RotateSpinner />
+          </div>
         </div>
       ) : (
         <div className="">
@@ -63,7 +63,7 @@ export default function HomePage() {
                       title: item.title,
                       description: item.description,
                       image: item.image,
-                      like: item.upvotes,
+                      upvotes: item.upvotes,
                       date: item.date,
                     }}
                   />

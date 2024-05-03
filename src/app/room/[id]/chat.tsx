@@ -171,7 +171,7 @@ export default function Chat({ id }: { id: string }) {
     <div className="chat-container">
       <div className="w-full chat-window" ref={chatWindowRef}>
         {messages.length === 0 ? (
-          <div>No Messages Available</div>
+          <div className="">No Messages Available</div>
         ) : (
           messages.map((message) => (
             <div
