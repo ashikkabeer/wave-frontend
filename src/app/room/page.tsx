@@ -71,7 +71,7 @@ export default function Room() {
       <div className="w-full flex flex-col justify-center items-center">
         <div className="md:w-2/4 w-screen px-4 md:px-0 flex justify-center flex-col gap-3">
           <div className="w-full flex justify-end">
-            <CreateRoomButton />
+            {currentRole === "student" && <CreateRoomButton />}
           </div>
           {/* <Link className="" href={`room/${params}`}> */}
           {chatrooms.map((chatroom) => (

@@ -74,6 +74,13 @@ export default function SignIn() {
             <RotateSpinner size={50} color="#A020F0" loading={loading} />
           </div>
         )}
+        <div className="flex bg-slate-200 border border-black flex-col w-full justify-center">
+          <p className="flex underline justify-center">
+            login with this credentials
+          </p>
+          <p className="flex justify-center font-medium">username: syam</p>
+          <p className="flex justify-center font-medium">password: syam</p>
+        </div>
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ export default function EventHeader({ data }: { data: any }) {
   const [currentUser, setCurrentUser] = useState(null);
   const [currentRole, setCurrentRole] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
+
   useEffect(() => {
     // Retrieve chat history when component mounts
     const fetchCurrentUser = async () => {
