@@ -18,6 +18,7 @@ export default function SignIn() {
       console.log("formData", formData);
       const values = Object.fromEntries(formData.entries());
       console.log("values", JSON.stringify(values));
+
       const response = await fetch(BASE_URL + "/auth/login", {
         headers: {
           "Content-Type": "application/json",
@@ -74,12 +75,19 @@ export default function SignIn() {
             <RotateSpinner size={50} color="#A020F0" loading={loading} />
           </div>
         )}
-        <div className="flex bg-slate-200 border border-black flex-col w-full justify-center">
+        <div className="flex bg-slate-200 border border-black rounded mt-5 flex-col w-full justify-center">
           <p className="flex underline justify-center">
-            login with this credentials
+            demo student credentials
           </p>
           <p className="flex justify-center font-medium">username: syam</p>
           <p className="flex justify-center font-medium">password: syam</p>
+        </div>
+        <div className="flex mt-5 bg-slate-200 border rounded border-black flex-col w-full justify-center">
+          <p className="flex underline justify-center">
+            demo faculty credentials
+          </p>
+          <p className="flex justify-center font-medium">username: salitha</p>
+          <p className="flex justify-center font-medium">password: salitha</p>
         </div>
       </div>
     </div>

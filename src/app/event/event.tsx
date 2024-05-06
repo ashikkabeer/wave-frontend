@@ -56,6 +56,9 @@ export default function EventHeader({ data }: { data: any }) {
   };
 
   const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this event?")) {
+      return;
+    }
     try {
       const response = await fetch(BASE_URL + `/event/${data.id}/delete`, {
         headers: {
@@ -69,8 +72,6 @@ export default function EventHeader({ data }: { data: any }) {
       console.log(result);
     } catch (error) {
       console.log("Failed to delete event");
-    } finally {
-      alert("Event deleted successfully");
     }
   };
   return (

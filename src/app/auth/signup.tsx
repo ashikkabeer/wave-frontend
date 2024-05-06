@@ -83,7 +83,7 @@ export function SignUp() {
               onChange={(e) => handleValueChange(e.target.name, e.target.value)}
               type="text"
               name="name"
-              placeholder="Name"
+              placeholder="Full Name"
             />
           </label>
           <label htmlFor="username" className="flex flex-col">
@@ -92,7 +92,7 @@ export function SignUp() {
               onChange={(e) => handleValueChange(e.target.name, e.target.value)}
               type="text"
               name="username"
-              placeholder="Username"
+              placeholder="use small letters only"
             />
           </label>
 
@@ -102,7 +102,7 @@ export function SignUp() {
               onChange={(e) => handleValueChange(e.target.name, e.target.value)}
               type="email"
               name="email"
-              placeholder="Email"
+              placeholder="example@musaliar.edu"
             />
           </label>
           <label htmlFor="password" className="flex flex-col">
